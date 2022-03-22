@@ -1,4 +1,4 @@
-#!/usr/bin/env /Users/bzhu/groovy-3.0.4/bin/groovy
+#!/usr/bin/groovy
 
 @Grab('mysql:mysql-connector-java:5.1.49')
 @GrabConfig(systemClassLoader = true)
@@ -9,31 +9,30 @@ import groovy.time.*
 import java.util.Date
 import Sc2MammoImg
 
+
+// db config
+db_host = "localhost"
+db_name = "dbname"
+db_user = "user"
+db_pass = "pass"
+
+
+// dicom study tables for multiple sets. Assume a set of DICOM tables ends with "_study", "oatient", "_series", "_instance".
+DICOM_STUDY_TABLES = ['deid_dicom_study']
+
+// '-1' meand a single collection for all exams.
 NUM_EXAMS_PER_FILE = -1
 
-db_host = "localhost"
-db_name = "elmore_breast_study"
-db_user = "bzhu"
-db_pass = "F4T2RC^Jd@cG"
+// default to current dir
+SC2_METADATA_OUT_DIR="."
 
-TOP_DATA_OUT_DIR="."
-
-// default survey table
+// ----------------------------
+// do not make any chaneg below
+// ----------------------------
 SURVEY_TABLE = ''
-
-// cureent DICOM image collections
-DICOM_STUDY_TABLES = ['deid_dicom_study']
 
 // sc2 util functions
 sc2_img = new Sc2MammoImg()
-
-/*
-Local image dirs:
-  dicom_study':     /data/r37deid
-  pos_dicom_study:  /data/athena-pos-2, /data/athena-pos-3-deid
-  neg_dicom_study:  /Users/Shared/Data/athena-neg-deid, /Users/Shared/Data/athena-neg-2-deid
-*/
-
 
 def proc_one(db, dicomStudyTables, surveyTable, acc_num_h) {
 
@@ -132,14 +131,14 @@ def save_exams(mammoExams, collIdx) {
 	def coll_dir = ""
 
 	if(NUM_EXAMS_PER_FILE <= 0) {
-		coll_dir = TOP_DATA_OUT_DIR
+		coll_dir = SC2_METADATA_OUT_DIR
 	}
 	else {
 		if(collIdx <= 0) {
 			println "invalid coll index: " + collIdx
 			System.exit(1)
 		}
-		coll_dir = TOP_DATA_OUT_DIR + "/coll_" + collIdx
+		coll_dir = SC2_METADATA_OUT_DIR + "/coll_" + collIdx
 	}
 
 	if(!(new File(coll_dir + "/metadata").exists())) new File(coll_dir + "/metadata").mkdirs()
