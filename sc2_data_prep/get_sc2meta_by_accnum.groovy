@@ -16,11 +16,15 @@ db_name = "dbname"
 db_user = "user"
 db_pass = "pass"
 
+db_host = "10.9.94.122"
+db_name = "elmore_breast_study"
+db_user = "bzhu"
+db_pass = "F4T2RC^Jd@cG"
 
 // dicom study tables for multiple sets. Assume a set of DICOM tables ends with "_study", "oatient", "_series", "_instance".
 DICOM_STUDY_TABLES = ['deid_dicom_study']
 
-// '-1' meand a single collection for all exams.
+// '-1' means a single collection for all exams.
 NUM_EXAMS_PER_FILE = -1
 
 // default to current dir
@@ -34,7 +38,7 @@ SURVEY_TABLE = ''
 // sc2 util functions
 sc2_img = new Sc2MammoImg()
 
-def proc_one(db, dicomStudyTables, surveyTable, acc_num_h) {
+def proc_one_exam(db, dicomStudyTables, surveyTable, acc_num_h) {
 
 	def mc = ['valid': false, 'err': 'unknonw']
 
@@ -223,7 +227,7 @@ else if(args.size() == 2) {
 	(new File(args[1])).eachLine { accnum_list.add(it) }
 }
 else {
-    println "Usage: get_sc2_by_accnum.groovy SURVEY_TABLE [ACCNUM_LIST_FILE]"
+    println "Usage: get_sc2meta_by_accnum.groovy SURVEY_TABLE [ACCNUM_LIST_FILE]"
 	println "  If acc num list is not supplied, all exams in the survey table will be processed."
     System.exit(0)
 }
@@ -238,7 +242,7 @@ cnt = 1
 for(int i=0; i<accnum_list.size(); i++) {
 
     def exam = [:]
-	exam = proc_one(db, DICOM_STUDY_TABLES, SURVEY_TABLE, accnum_list[i])
+	exam = proc_one_exam(db, DICOM_STUDY_TABLES, SURVEY_TABLE, accnum_list[i])
 	// println "  return num of exams=" + exams.size()
 	if(exam?['valid']) {
 		mammo_exams.add(exam)
