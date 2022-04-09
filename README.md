@@ -19,11 +19,16 @@ External validation of the DREAM Digital Mammography Competition Ensemble Model
      
 
 2. Prepare metadata and imaging files by running the Python program, sc2_data_prep.py.
-   When facing a large number of exams, the software can divide all exams into sub-collections. User can specify a max number of subjects to be in a collection through
-   a command-line argument.
+   Output: 
+     ./images: DICOM image files
+	 ./metadata/exams_metadata.tsv
+	 ./metadata/images_crosswalk.tsv
 
-3. Launch SC2 ensemble models
-     place both 'metadata' and 'images' in a same parent directory. In the parent directory, run the following command.
-	   > run_sc2_models.sh
-	 In the case running the models for sub-collections, copy the 'run_sc2_models.sh' in each sub-collections and execute them in each place.
+   When facing a large number of exams, the software can divide exams into sub-collections. User can specify a max number of subjects 
+   to be in a collection through a command-line argument.
+
+3. Launch SC2 DREAM challenge ensemble models
+   place both 'metadata' and 'images' in a same parent directory. In the parent directory, copy and run the following shell program.
+	 > run_sc2_models.sh
+   When running the models for sub-collections, copy 'run_sc2_models.sh' over and run it in each sub-collection.
 
