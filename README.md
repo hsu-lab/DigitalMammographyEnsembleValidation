@@ -18,12 +18,12 @@ External validation of the DREAM Digital Mammography Competition Ensemble Model
   If Docker images cannot be downloaded, one needs to contact DREAM Challenge team for download permission. 
      
 
-2. Prepare metadata and imaging files for running the ensemble models.
-     1.1 Go to 'sc2_data_prep' and modify file, get_sc2_metadata.groovy, for db and other configs as indicated in the top of the file.
-     1.2 Run 'get_sc2_metadata.groovy' to generate two metadata files. An imaging mapping file, exams_dcm_file_mappings.txt, is also created.
-     1.3 Modify the original DICOM file source(s) for the file, 'sc2_copy_imgs.sh'. Run the shell script to copy DCM files into the 'images' directory.
+2. Prepare metadata and imaging files by running the Python program, sc2_data_prep.py.
+   When facing a large number of exams, the software can divide all exams into sub-collections. User can specify a max number of subjects to be in a collection through
+   a command-line argument.
 
 3. Launch SC2 ensemble models
      place both 'metadata' and 'images' in a same parent directory. In the parent directory, run the following command.
 	   > run_sc2_models.sh
+	 In the case running the models for sub-collections, copy the 'run_sc2_models.sh' in each sub-collections and execute them in each place.
 
