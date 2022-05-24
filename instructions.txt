@@ -1,0 +1,25 @@
+What the data should have:
+Images:All 4 images including: Right CC, Left CC, Right MLO, and Left MLO view
+Dicom header: Study UID, age, Series Description, Accession No
+
+The survey: accession_no, subjectId, examIndex, daysSincePreviousExam, cancerL, cancerR, invL, invR, age, implantEver, implantNow, bcHistory, yearsSincePreviousBc, previousBcLaterality, reduxHistory, reduxLaterality, hrt, antiestrogen, firstDegreeWithBc, firstDegreeWithBc50, bmi, race
+
+If it doesn’t have the survey, do this:
+Generate a dataframe having the columns above, and save it as a csv file. The accession number can be randomly generated, so the subjectId, but they should be unique.The race, age and the bmi should also be filled.
+
+If it doesn’t have the header, do this:
+Produce a random number for each case (4 images) as the accession number
+Add the random number generated to the header using the following line:
+dcm_add_header.py -acc_no “123456” 1-1.dcm
+
+And based on the view and laterality of the image (which can be extracted from other fields in the dicom header), add the series description using the following line
+dcm_add_header.py -series_desc “R MLO”   1-1.dcm
+
+Once you have the images, as they should be, put them all in a folder, and then run the following script to put in 20 image batches (depending on your storage, the models might run out of memory if you have more than 20 images, so we recommend putting them in 20 image batches), using the following line:
+python3 sc2_data_prep.py -imgdir=./images2 -survey=./images.csv -use_ori_imgname=True -num_subjs_per_collection=20
+
+At this point, you would have collections of 20 images, and their metadata (survey and image crosswalks, which relates the images to the survey and point each case to where the image is stored.)
+And then you can run the models. The scripts: run_ensemble_models.sh takes care of running each model, but we have created the script: run_bash.sh for going over each collection of 20 cases and running the models for them. The first line would indicate the bash script to go over the collections, one by one, and it would save the results for each collection.
+The results for each model would be saved in a folder under the models name.
+
+To have the ensemble results, run the following script: calculate_ensemble.sh, which would give the appropriate weight to each model’s result and would combine them together and put it in a folder with the name ensemble.
